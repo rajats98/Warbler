@@ -1,10 +1,36 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { fetchMessage } from "../store/actions/messages";
+import { fetchMessages } from "../store/actions/messages";
+import MessageItem from "../components/MessageItem.js";
+
 
 class MessageList extends Component{
 	componentDidMount(){
-		this.props.fetchMessage();
+		this.props.fetchMessages();
+	}
+
+	render(){
+		const { messages } = this.props;
+
+		let messageList = messages.map(m =>(
+			<MessageItem 
+				key={m._id}
+				date={m.createAt}
+				text={m.text}
+				username={m.user.username}
+				profileImageUrl={m.user.profileImageUrl}
+			/> 
+		));
+
+		return (
+			<div className = "row col-sm-8">
+				<div className = "offset-1 col-sm-10">
+					<ul className="list-group" id="messages">
+						{messageList}
+					</ul>
+				</div>
+			</div>
+		)
 	}
 }
 
@@ -14,4 +40,4 @@ function mapStateToProps(state) {
 	};
 }
 
-export default connect(mapStateToProps, { fetchMessage })(MessageList);
+export default connect(mapStateToProps, { fetchMessages })(MessageList);
